@@ -2,7 +2,84 @@
 
 console.log('🔥 main.js connected');
 
-const API_BASE_URL = 'https://your-railway-backend.up.railway.app';
+const API_BASE_URL = 'https://masamor-backend-production.up.railway.app';
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🧠 DOM loaded');
+  initGlobalActions();
+  initReservationModal();
+});
+
+function initGlobalActions() {
+  document.body.addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+
+    switch (action) {
+      case 'reserve':
+        openReservationModal(btn.dataset.source);
+        break;
+      case 'checkout':
+        handleCheckout(btn.dataset.priceId);
+        break;
+      default:
+        console.warn('Action not recognized:', action);
+    }
+  });
+}
+
+function handleCheckout(priceId) {
+  console.log('💳 Checkout initiated:', priceId);
+  alert(`Checkout: ${priceId}`);
+}
+
+let modalOverlay;
+let modal;
+let form;
+
+function initReservationModal() {
+  modalOverlay = document.querySelector('.modal-overlay');
+  modal = document.querySelector('.modal');
+  form = document.getElementById('reservation-form');
+
+  if (!modalOverlay || !modal || !form) {
+    console.warn('⚠️ Modal not found');
+    return;
+  }
+
+  modalOverlay.addEventListener('click', closeReservationModal);
+  modal.querySelector('.close-button')?.addEventListener('click', closeReservationModal);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeReservationModal();
+  });
+
+  form.addEventListener('submit', handleReservationSubmit);
+
+  const cancelBtn = form.querySelector('.cancel-button');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', closeReservationModal);
+  }
+}
+
+function openReservationModal(source = 'unknown') {
+  console.log('📩 Opening modal from:', source);
+  modalOverlay.classList.add('active');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReservationModal() {
+  modalOverlay?.classList
+cd ~/Documents/masamor-project/masamor-frontend/js
+cat > main.js << 'EOF'
+'use strict';
+
+console.log('🔥 main.js connected');
+
+const API_BASE_URL = 'https://masamor-backend-production.up.railway.app';
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('🧠 DOM loaded');
